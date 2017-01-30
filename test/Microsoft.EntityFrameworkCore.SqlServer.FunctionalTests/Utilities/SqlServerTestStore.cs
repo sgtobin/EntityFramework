@@ -22,10 +22,10 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.FunctionalTests.Utilities
     {
         public const int CommandTimeout = 90;
 
-#if NETCOREAPP1_1
-        private static string BaseDirectory => AppContext.BaseDirectory;
-#else
+#if NET451
         private static string BaseDirectory => AppDomain.CurrentDomain.BaseDirectory;
+#else
+        private static string BaseDirectory => AppContext.BaseDirectory;
 #endif
 
         public static SqlServerTestStore GetOrCreateShared(string name, Action initializeDatabase, bool cleanDatabase = true)

@@ -63,7 +63,7 @@ namespace Microsoft.EntityFrameworkCore.Relational.Tests.TestUtilities.FakeProvi
             {
                 DisposeCount++;
 
-#if NETCOREAPP1_1
+#if !NET451
                 CloseCount++;
 #endif
                 base.Dispose(true);
