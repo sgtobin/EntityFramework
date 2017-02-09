@@ -397,22 +397,34 @@ namespace Microsoft.EntityFrameworkCore.Query
 
                 queryModel.TransformExpressions(new RecursiveQueryModelExpressionVisitor(this).Visit);
             }
+        }
 
-            private class RecursiveQueryModelExpressionVisitor : ExpressionVisitorBase
+        /// <summary>
+        /// 
+        /// </summary>
+        protected class RecursiveQueryModelExpressionVisitor : ExpressionVisitorBase
+        {
+            private readonly QueryModelVisitorBase _parentVisitor;
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="parentVisitor"></param>
+            public RecursiveQueryModelExpressionVisitor(QueryModelVisitorBase parentVisitor)
             {
-                private readonly NondeterministicResultCheckingVisitor _parentVisitor;
+                _parentVisitor = parentVisitor;
+            }
 
-                public RecursiveQueryModelExpressionVisitor(NondeterministicResultCheckingVisitor parentVisitor)
-                {
-                    _parentVisitor = parentVisitor;
-                }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="expression"></param>
+            /// <returns></returns>
+            protected override Expression VisitSubQuery(SubQueryExpression expression)
+            {
+                _parentVisitor.VisitQueryModel(expression.QueryModel);
 
-                protected override Expression VisitSubQuery(SubQueryExpression expression)
-                {
-                    _parentVisitor.VisitQueryModel(expression.QueryModel);
-
-                    return base.VisitSubQuery(expression);
-                }
+                return base.VisitSubQuery(expression);
             }
         }
 
